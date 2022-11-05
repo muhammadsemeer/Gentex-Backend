@@ -11,6 +11,10 @@ const errorHandler = (
     err.message = err.message || "Internal Sever Error";
     err.statusCode = err.statusCode || 500;
 
+    if (process.env.NODE_ENV !== "development" && err.statusCode === 500) {
+        err.message = "Internal Sever Error";
+    }
+
     let response;
 
     if (process.env.NODE_ENV === "development") {
