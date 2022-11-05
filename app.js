@@ -4,6 +4,7 @@ const app = express();
 const logger = require("morgan");
 const helmet = require("helmet");
 const { errorHandler, handler404 } = require("./middlewares/errorHandlers");
+const { indexRouter, authRouter } = require("./router");
 
 // Global Middlewares
 app.use(logger("dev"))
@@ -12,7 +13,8 @@ app.use(logger("dev"))
     .use(express.urlencoded({ limit: "5mb", extended: false }));
 
 // Routers
-app.use("/", require("./router"));
+app.use("/", indexRouter);
+app.use("/auth", authRouter);
 
 // ErrorHandlers
 app.use(errorHandler).use(handler404);

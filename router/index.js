@@ -1,7 +1,7 @@
-const { Router } = require("express");
+const indexRouter = require("./indexRouter");
+const authRouter = require("./authRouter");
 
-const router = Router();
-
-router.get("/", (req, res) => res.json("Hello Folks!!! Welcome onboard"));
-
-module.exports = router;
+module.exports = {
+    indexRouter,
+    authRouter,
+};
