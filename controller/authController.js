@@ -1,6 +1,6 @@
-const User = require('../model/User');
-const jwt = require("jsonwebtoken")
-
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const User = require("../model/User");
 
 module.exports = {
     login: async (req, res) => {
@@ -11,7 +11,7 @@ module.exports = {
             });
         }
 
-        const isUserExisting = await User.findOne({ email })
+        const isUserExisting = await User.findOne({ email });
 
         if (!isUserExisting) {
             return res.status(400).json({
@@ -19,19 +19,24 @@ module.exports = {
             });
         }
 
-        const isPasswordCorrect = await bcrypt.compare(password, isUserExisting.password)
+        const isPasswordCorrect = await bcrypt.compare(
+            password,
+            isUserExisting.password
+        );
 
-        if(!isPasswordCorrect) {
+        if (!isPasswordCorrect) {
             return res.status(400).json({
                 message: "Invalid Crendentials",
             });
         }
 
-        const token = jwt.sign({
-            userId: isUserExisting._id,
-            role: isUserExisting.role,
-        }, process.env.JWT_SECRET || "secret")
-        
+        const token = jwt.sign(
+            {
+                userId: isUserExisting._id, // eslint-disable-line
+                role: isUserExisting.role,
+            },
+            process.env.JWT_SECRET || "secret"
+        );
 
         return res.status(200).json({ message: "Login Successfull", token });
     },
