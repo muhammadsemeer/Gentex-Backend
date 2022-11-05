@@ -1,6 +1,7 @@
 require("dotenv").config();
 const http = require("http");
 const app = require("./app");
+const connectDB = require("./utils/db");
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3001;
 app.set("port", PORT);
 
 server.listen(PORT);
+connectDB();
 
 const onListen = () => {
     console.log(`Server running on ${PORT} in ${process.env.NODE_ENV} mode`);
