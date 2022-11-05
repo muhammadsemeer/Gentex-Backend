@@ -7,7 +7,6 @@ const UserSchema = new mongoose.Schema({
     },
     aadhar: {
         type: String,
-        required: true,
     },
     phoneNumber: {
         type: String,
@@ -21,6 +20,15 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    password: {
+        type: String,
+        required: true,
     },
 });
 
