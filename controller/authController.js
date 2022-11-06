@@ -40,7 +40,16 @@ module.exports = {
                 process.env.JWT_SECRET || "secret"
             );
 
-            return res.status(200).json({ message: "Login Successful", token });
+            return res.status(200).json({
+                message: "Login Successful",
+                token,
+                user: {
+                    // eslint-disable-next-line no-underscore-dangle
+                    id: isUserExisting._id,
+                    role: isUserExisting.role,
+                    name: isUserExisting.name,
+                },
+            });
         } catch (err) {
             return next(new ErrorHandler(500, err.message));
         }
@@ -140,9 +149,16 @@ module.exports = {
                     process.env.JWT_SECRET || "secret"
                 );
 
-                return res
-                    .status(200)
-                    .json({ message: "Login Successful", token });
+                return res.status(200).json({
+                    message: "Login Successful",
+                    token,
+                    user: {
+                        // eslint-disable-next-line no-underscore-dangle
+                        id: result._id,
+                        role: result.role,
+                        name: result.name,
+                    },
+                });
             });
         } catch (err) {
             next(new ErrorHandler(500, err.message));
