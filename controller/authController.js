@@ -50,7 +50,7 @@ module.exports = {
                     name: isUserExisting.name,
                 },
             });
-W        } catch (err) {
+        } catch (err) {
             return next(new ErrorHandler(500, err.message));
         }
     },

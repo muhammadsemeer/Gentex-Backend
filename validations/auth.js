@@ -17,8 +17,8 @@ const signup = [
             "Password Must Have Min 8 characters and contain atleast 1 lowercase, 1 symbols, 1 numbers, 1 uppercase"
         ),
     body("name").trim().notEmpty().withMessage("Name Can't empty"),
-    body("aadhaar").notEmpty().withMessage("Aadhaar Can't empty"),
-    body("dob").isDate({ format: "DD-MM-YYYY" }).withMessage("Dob Can't empty"),
+    body("aadhar").notEmpty().withMessage("Aadhaar Can't empty"),
+    body("dob").isDate({ format: "YYYY-MM-DD" }).withMessage("Dob Can't empty"),
     body("gender").notEmpty().withMessage("Gender Can't empty"),
     body("role").notEmpty().withMessage("Role Can't empty"),
     body("phoneNumber").isMobilePhone().withMessage("PhoneNumber Can't empty"),
