@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
+const userModel = require("../model/User");
 
 // eslint-disable-next-line consistent-return
-module.exports = async (req, res, next) => {
+const roleValidator = (role) => async (req, res, next) => {
     try {
-        console.log(req.headers.authorization);
         if (!req.headers.authorization) {
             return res
                 .status(400)
@@ -16,9 +16,19 @@ module.exports = async (req, res, next) => {
             process.env.JWT_SECRET || "secret"
         );
         req.body.tokenData = tokenData;
-        next();
+
+        const user = await userModel.findById({ _id: tokenData.userId });
+
+        if (user.role === role) {
+            return next();
+        }
+        return res
+            .status(400)
+            .json({ status: false, message: "Invalid Token" });
     } catch (err) {
         const response = err.message || "Internal Server Error!";
         return res.status(400).json({ message: response });
     }
 };
+
+module.exports = roleValidator;
