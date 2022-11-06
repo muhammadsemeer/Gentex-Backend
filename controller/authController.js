@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../model/User");
+const doctorModel = require("../model/Doctor");
 const ErrorHandler = require("../utils/error");
 
 module.exports = {
@@ -45,6 +46,54 @@ module.exports = {
         } catch (err) {
             console.error(err);
             return next(new ErrorHandler(500, err.message));
+        }
+    },
+    createHospital: async (req, res) => {
+        try {
+            // eslint-disable-next-line prefer-const
+            let { name, email, password, phoneNumber, doctor } = req.body;
+
+            // password = await bcrypt.hash(password, 10);
+            const hospital = new User({
+                name,
+                email,
+                password,
+                phoneNumber,
+                role: "hospital",
+            });
+            await hospital.save();
+
+            const doctorUser = new User({
+                name: doctor.name,
+                aadhar: doctor.aadhar,
+                phoneNumber: doctor.phoneNumber,
+                dob: doctor.dob,
+                gender: doctor.gender,
+                role: "doctor",
+            });
+
+            await doctorUser.save();
+
+            // eslint-disable-next-line new-cap
+            const doc = new doctorModel({
+                // eslint-disable-next-line no-underscore-dangle
+                userId: doctorUser._id,
+                designation: doctor.designation,
+                specialization: doctor.specialization,
+                // eslint-disable-next-line no-underscore-dangle
+                hospitalId: hospital._id,
+            });
+
+            await doc.save();
+
+            return res.status(200).json({
+                status: true,
+                message: "Hospital created successfully!",
+            });
+        } catch (err) {
+            console.log(err);
+            const response = err.message || "Internal Server Error!";
+            return res.status(400).json({ message: response });
         }
     },
 };
