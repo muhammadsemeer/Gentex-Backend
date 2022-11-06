@@ -13,19 +13,30 @@ const Prescription = new mongoose.Schema({
     },
     prescription: [
         {
-            medication: {
+            medicine: {
                 type: String,
                 required: true,
             },
             type: {
                 type: String,
-                required: true,
             },
             days: {
                 type: Number,
                 required: true,
             },
-            offten: {
+            dosage: {
+                type: String,
+                required: true,
+            },
+        },
+    ],
+    labReports: [
+        {
+            testName: {
+                type: String,
+                required: true,
+            },
+            result: {
                 type: String,
                 required: true,
             },
@@ -33,4 +44,4 @@ const Prescription = new mongoose.Schema({
     ],
 });
 
-module.exports = mongoose.exports("Prescription", Prescription);
+module.exports = mongoose.model("Prescription", Prescription);

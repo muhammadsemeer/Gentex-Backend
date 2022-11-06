@@ -5,7 +5,12 @@ const logger = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const { errorHandler, handler404 } = require("./middlewares/errorHandlers");
-const { indexRouter, authRouter, hospitalRouter } = require("./router");
+const {
+    indexRouter,
+    authRouter,
+    hospitalRouter,
+    prescriptionRouter,
+} = require("./router");
 
 // Global Middlewares
 app.use(logger("dev"))
@@ -23,6 +28,7 @@ app.use(logger("dev"))
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/hospital", hospitalRouter);
+app.use("/prescription", prescriptionRouter);
 
 // ErrorHandlers
 app.use(errorHandler).use(handler404);
