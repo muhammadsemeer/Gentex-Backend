@@ -87,3 +87,27 @@ module.exports.getDocDetail = async (req, res) => {
         return res.status(400).json({ message: response });
     }
 };
+
+module.exports.getSuperAdminDashboardData = async (req, res) => {
+    try {
+        const hospitals = await userModel.find(
+            { role: "hospital" },
+            { password: 0 }
+        );
+        const doctorsCount = await userModel.find({ role: "doctor" }).count();
+        const patientCount = await userModel.find({ role: "customer" }).count();
+
+        return res.status(200).json({
+            status: true,
+            data: {
+                doctorsCount,
+                patientCount,
+                hospitalCount: hospitals.length,
+                hospitals,
+            },
+        });
+    } catch (err) {
+        const response = err.message || "Internal Server Error!";
+        return res.status(400).json({ message: response });
+    }
+};
