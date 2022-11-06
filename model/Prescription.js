@@ -13,7 +13,7 @@ const Prescription = new mongoose.Schema({
     },
     prescription: [
         {
-            medication: {
+            medicine: {
                 type: String,
                 required: true,
             },
@@ -25,7 +25,19 @@ const Prescription = new mongoose.Schema({
                 type: Number,
                 required: true,
             },
-            offten: {
+            dosage: {
+                type: String,
+                required: true,
+            },
+        },
+    ],
+    labReports: [
+        {
+            testName: {
+                type: String,
+                required: true,
+            },
+            result: {
                 type: String,
                 required: true,
             },
