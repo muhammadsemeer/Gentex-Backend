@@ -10,8 +10,15 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 app.set("port", PORT);
 
-server.listen(PORT);
-connectDB();
+// eslint-disable-next-line func-names
+(async function () {
+    try {
+        await connectDB();
+        server.listen(PORT);
+    } catch (err) {
+        console.log("Can't Connect to db");
+    }
+})();
 
 const onListen = () => {
     console.log(`Server running on ${PORT} in ${process.env.NODE_ENV} mode`);
