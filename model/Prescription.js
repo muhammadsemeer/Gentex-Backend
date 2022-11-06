@@ -19,7 +19,6 @@ const Prescription = new mongoose.Schema({
             },
             type: {
                 type: String,
-                required: true,
             },
             days: {
                 type: Number,
@@ -45,4 +44,4 @@ const Prescription = new mongoose.Schema({
     ],
 });
 
-module.exports = mongoose.exports("Prescription", Prescription);
+module.exports = mongoose.model("Prescription", Prescription);
