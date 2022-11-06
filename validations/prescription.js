@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const {
     Types: { ObjectId },
 } = require("mongoose");
@@ -42,6 +42,12 @@ const create = [
     handleValidation,
 ];
 
+const getAll = [
+    param("userId").notEmpty().withMessage("userId can't empty"),
+    param("userId").customSanitizer((input) => ObjectId(input)),
+];
+
 module.exports = {
     create,
+    getAll,
 };

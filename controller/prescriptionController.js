@@ -19,6 +19,21 @@ const create = (req, res, next) => {
     }
 };
 
+const getAll = async (req, res, next) => {
+    try {
+        const prescriptions = await Prescription.find({
+            userId: req.params.userId,
+        }).exec();
+
+        return res.json({
+            prescriptions,
+        });
+    } catch (err) {
+        return next(new ErrorHandler(err.statusCode || 500, err.message));
+    }
+};
+
 module.exports = {
     create,
+    getAll,
 };
