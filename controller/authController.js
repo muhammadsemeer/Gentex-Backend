@@ -53,7 +53,7 @@ module.exports = {
             // eslint-disable-next-line prefer-const
             let { name, email, password, phoneNumber, doctor } = req.body;
 
-            // password = await bcrypt.hash(password, 10);
+            password = await bcrypt.hash(password, 10);
             const hospital = new User({
                 name,
                 email,
@@ -62,11 +62,13 @@ module.exports = {
                 role: "hospital",
             });
             await hospital.save();
-
+            doctor.password = await bcrypt.hash(doctor.password, 10);
             const doctorUser = new User({
                 name: doctor.name,
                 aadhar: doctor.aadhar,
                 phoneNumber: doctor.phoneNumber,
+                email: doctor.email,
+                password: doctor.password,
                 dob: doctor.dob,
                 gender: doctor.gender,
                 role: "doctor",

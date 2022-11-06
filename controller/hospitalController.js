@@ -1,4 +1,5 @@
 const { Types } = require("mongoose");
+const bcrypt = require("bcrypt");
 const doctorModel = require("../model/Doctor");
 const userModel = require("../model/User");
 
@@ -13,7 +14,11 @@ module.exports.addDoc = async (req, res) => {
             specialization,
             designation,
             tokenData,
+            password,
+            email,
         } = req.body;
+
+        const pswd = await bcrypt.hash(password, 10);
 
         // eslint-disable-next-line new-cap
         const user = new userModel({
@@ -22,6 +27,8 @@ module.exports.addDoc = async (req, res) => {
             phoneNumber,
             dob,
             gender,
+            email,
+            password: pswd,
             role: "doctor",
         });
 
@@ -52,13 +59,16 @@ module.exports.getAllDocsList = async (req, res) => {
         const { tokenData } = req.body;
 
         const details = await userModel.findById({
-            _id: tokenData.hospitalId,
+            _id: tokenData.userId,
         });
         const doctors = await doctorModel
             .find({
                 hospitalId: Types.ObjectId(tokenData.userId),
             })
-            .populate("userId", { _id: -1 });
+            .populate("userId", {
+                name: 1,
+                email: 1,
+            });
 
         return res
             .status(200)
