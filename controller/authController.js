@@ -40,11 +40,8 @@ module.exports = {
                 process.env.JWT_SECRET || "secret"
             );
 
-            return res
-                .status(200)
-                .json({ message: "Login Successfull", token });
+            return res.status(200).json({ message: "Login Successful", token });
         } catch (err) {
-            console.error(err);
             return next(new ErrorHandler(500, err.message));
         }
     },
@@ -96,6 +93,59 @@ module.exports = {
             console.log(err);
             const response = err.message || "Internal Server Error!";
             return res.status(400).json({ message: response });
+        }
+    },
+    // eslint-disable-next-line consistent-return
+    signUp: async (req, res, next) => {
+        try {
+            const {
+                name,
+                aadhaar,
+                phoneNumber,
+                gender,
+                dob,
+                role,
+                email,
+                password,
+            } = req.body;
+
+            const hash = await bcrypt.hash(password, 10);
+
+            const newUser = new User({
+                name,
+                aadhaar,
+                phoneNumber,
+                gender,
+                dob,
+                role,
+                email,
+                password: hash,
+            });
+
+            const isUserExisting = await User.findOne({ email });
+            if (isUserExisting) {
+                return res.status(400).json({
+                    message: "User Already Exists",
+                });
+            }
+
+            newUser.save((err, result) => {
+                if (err) return next(new ErrorHandler(500, err.message));
+
+                const token = jwt.sign(
+                    {
+                        userId: result._id, // eslint-disable-line
+                        role: result.role,
+                    },
+                    process.env.JWT_SECRET || "secret"
+                );
+
+                return res
+                    .status(200)
+                    .json({ message: "Login Successful", token });
+            });
+        } catch (err) {
+            next(new ErrorHandler(500, err.message));
         }
     },
 };
